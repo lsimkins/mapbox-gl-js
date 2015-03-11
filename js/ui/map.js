@@ -83,7 +83,9 @@ util.extend(Map.prototype, {
         interactive: true,
         hash: false,
 
-        attributionControl: true
+        attributionControl: true,
+
+        failIfMajorPerformanceCaveat: false
     },
 
     addControl: function(control) {
@@ -372,7 +374,7 @@ util.extend(Map.prototype, {
     },
 
     _setupPainter: function() {
-        var gl = this._canvas.getWebGLContext();
+        var gl = this._canvas.getWebGLContext(this.options.failIfMajorPerformanceCaveat);
 
         if (!gl) {
             console.error('Failed to initialize WebGL');

@@ -1,5 +1,7 @@
 'use strict';
 
+var Canvas = require('./canvas');
+
 var frame = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
@@ -44,7 +46,8 @@ exports.timed = function (fn, dur, ctx) {
     return function() { abort = true; };
 };
 
-exports.supported = function() {
+exports.supported = function(options) {
+
     var supports = [
 
         function() { return typeof window !== 'undefined'; },
@@ -87,12 +90,7 @@ exports.supported = function() {
         },
 
         function() {
-            var canvas = document.createElement('canvas');
-            if ('supportsContext' in canvas) {
-                return canvas.supportsContext('webgl') || canvas.supportsContext('experimental-webgl');
-            }
-            return !!window.WebGLRenderingContext &&
-                (!!canvas.getContext('webgl') || !!canvas.getContext('experimental-webgl'));
+            return new Canvas().supportsWebGLContext((options && options.failIfMajorPerformanceCaveat) || false);
         },
 
         function() { return 'Worker' in window; }
